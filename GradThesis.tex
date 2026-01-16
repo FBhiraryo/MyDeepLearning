@@ -1,0 +1,258 @@
+\documentclass[a4paper,11truept]{ltjsreport}
+% 本文のフォントサイズ及び用紙の大きさを固定
+\usepackage[top=30truemm,bottom=30truemm,left=25truemm,right=25truemm]{geometry}
+%　余白設定のためgeometryパッケージを使う
+\usepackage{amsmath,mathtools, amssymb, amsfonts, latexsym,fancyhdr,lastpage,float,hyperref}
+\usepackage[deluxe]{{luatexja-preset}}
+\usepackage{url}
+\renewcommand\UrlFont{\rmfamily}
+
+% pagestyleの設定%
+\fancypagestyle{fancy}{%
+\lhead{}%ヘッダ左を空に
+\rhead{\rightmark}%ヘッダ右に章タイトルを表示
+\cfoot{\thepage}%ヘッダ中央下にページ番号を表示
+\rfoot{}%ヘッダ右下を空に
+}
+
+\fancypagestyle{plain}{
+    \fancyhf{} % ヘッダーとフッターをすべてクリア
+    \cfoot{} % ページ番号も消す
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.0pt}
+}
+
+
+% section,subsection,subsubsectionのフォント及びサイズ設定
+\makeatletter
+\def\chapter{\clearpage\@startsection {chapter}{0}{\z@}{%
+-3.5ex plus -1ex minus -.2ex}{2.3ex plus .2ex}{\huge\bfseries}}
+\def\section{\@startsection {section}{1}{\z@}{%
+-3.5ex plus -1ex minus -.2ex}{2.3ex plus .2ex}{\LARGE\bfseries}}
+\def\subsection{\@startsection {subsection}{2}{\z@}{%
+-3.5ex plus -1ex minus -.2ex}{2.3ex plus .2ex}{\Large\bfseries}}
+\def\subsubsection{\@startsection {subsubsection}{3}{\z@}{%
+-3.5ex plus -1ex minus -.2ex}{2.3ex plus .2ex}{\large\bfseries}}
+\makeatother
+
+\newcommand{\chap}[1]{\chapter{#1}\rhead{\thechapter\ \ #1}\label{chap:#1}}
+
+\newcommand{\sect}[1]{\section{#1}\lhead{\thesection\ \ #1}\label{sect:#1}}
+
+% 図表番号の設定
+\renewcommand{\thechapter}{\arabic{chapter}}
+
+\makeatletter
+  \renewcommand{\theequation}{\thechapter.\arabic{equation}}
+  \@addtoreset{equation}{chapter}
+  \renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+  \@addtoreset{figure}{chapter}
+  \renewcommand{\thetable}{\thechapter.\arabic{table}}
+  \@addtoreset{table}{chapter}
+ \makeatother
+
+\newcommand{\gazou}[3]{\begin{figure}[H] \centering \includegraphics[scale=#2]{figs/#1.png} \caption{#3} \label{fig:#3} \end{figure}}
+% \gazou{名前.png}{倍率}{キャプション}
+% \usepackage[dvipdfmx]{graphicx}
+\usepackage{tikz}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+
+\title{\large{卒業論文}\\ \vspace{2\baselineskip}\huge{機械学習を用いた宇宙線電子スペクトルにおける近傍超新星残骸の兆候の識別および分類}}
+\author{\\早稲田大学\\
+先進理工学部\ 物理学科\\
+平本亮\\
+Motz Holger Martin研究室}
+\date{\today}
+
+
+
+\begin{document}
+\pagenumbering{gobble} %ページ番号を消す
+\maketitle
+\clearpage
+
+
+\begin{abstract}
+\thispagestyle{plain} % 1ページ目のヘッダーとフッターを消す
+概要desu\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要\\概要
+\end{abstract}
+\clearpage
+
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\tableofcontents % 目次を挿入
+\rhead{目次}
+\cleardoublepage
+
+\listoffigures % 図目次を挿入
+\rhead{図目次}
+\cleardoublepage
+
+\listoftables % 表目次を挿入
+\rhead{表目次}
+\cleardoublepage
+
+
+
+\chap{序章}
+\sect{宇宙線}
+　宇宙線とは、宇宙から飛来する高エネルギーの荷電粒子のことである。現在では宇宙線の定義は広く、宇宙線と呼ばれるものの中には高エネルギーγ線のような電磁波やニュートリノのような中性粒子
+も含まれるが、本稿では原点に立ち返って高エネルギー荷電粒子のことを指すこととする。宇宙線のうち、9割は陽子であり、その他の重い原子核や電子などが残りの割合を占める。宇宙線のエネルギーは非常に広範囲にわたり、数MeVから10$^{20}$eVを超えるものまで観測されている。
+宇宙線はシンクロトロン放射や逆コンプトン散乱によってエネルギー損失が生じ、エネルギースペクトルは指数関数的に減少する。宇宙線のエネルギースペクトルは
+現在までに観測された宇宙線のうち、最も高いエネルギ―を持つものは1991年に観測された3.2$\times$10$^{20}$eVの宇宙線である。
+\\
+　宇宙線のような荷電粒子は銀河内を伝播するときに銀河磁場によって進行方向が曲げられ、拡散的に運動する。そのため、宇宙線の到来方向を観測しても起源を特定できないことが多い。
+故に宇宙線の起源や加速機構については、候補はあるものの未だ解明されていないことも多い。
+
+
+\chap{CALET}
+
+\chap{宇宙線電子}
+　宇宙線電子(Cosmic Ray Electron)は、宇宙線のうち、電子や陽電子のことを指す。宇宙線電子のエネルギーはMeVからTeVスケールである。
+宇宙線電子の起源は候補がいくつかあるが、特にTeV領域の宇宙線電子の起源は超新星残骸(Super Nova Remnant:SNR)であると考えられている。
+また宇宙線電子は質量が小さく、シンクロトロン放射や逆コンプトン散乱によるエネルギー損失が大きいので、TeV領域の宇宙線電子の伝播距離は$\lesssim$1kpc、伝播年数は$\lesssim 10^{5}$年までに制限される。
+したがってTeV領域の宇宙線電子の起源は近傍の超新星残骸に絞られる。
+
+\sect{加速機構}
+　宇宙線の加速機構についても依然はっきりとしたものは分かっていないが、現在の有力な加速機構は衝撃波加速(First Order Fermi Acceleration)である。
+超新星爆発によって生じた衝撃波が
+
+
+\sect{伝播機構}
+
+
+
+
+\chap{機械学習}
+　本研究ではシミュレーションによって得られた宇宙線電子のデータをニューラルネットワークを用いて学習し、得られたスペクトルデータからカットオフエネルギーを予測することを目的とする。
+機械学習(Machine Learning)は一般に、人工知能(Artificial Intelligence:AI)にデータを学習させ、未知のデータに対して予測をする技術である。さらに機械学習は正解データを用いて学習を進める教師あり学習と、正解データなしで探索的に学習を進める教師なし学習に分けられる。
+本研究では教師あり学習を、さらに言えば深層学習(Deep Learning)を用いる。
+\sect{機械学習の仕組み}
+　機械学習(以下では教師あり学習のみを指す)の大まかな構造は、入力→変換→出力である。はじめこの変換はランダムに設定されているが。入力データを出力データに変換した後、出力データと正解データの誤差(Loss)を
+損失関数(Loss Function)によって評価し、誤差を小さくするように変換を更新する。この変換の更新のことを``学習''(Training)と呼ぶ。
+\gazou{ML_flow}{0.5}{機械学習の流れ}
+この``学習''を繰り返すことで次第に出力が正解に近づいていき、学習用の入力データ(トレーニングデータ)以外の未知の入力データに対しても正解に近い出力を返すことができる。
+\sect{機械学習の構造}
+　前節では機械学習における変換の構造については明らかにしていない。ここではその構造についてを例示的に説明する。
+まず、入力データは一般にテンソル(Tensor)で表現される。実際には1階のテンソルであるベクトルを用いることが多い。同様に、出力データもテンソルで表現される。それぞれのテンソルは入力層(Input Layer)、出力層(Output Layer)と呼ばれる。
+各層の要素(成分)のことをノード(Node)と呼び、層間のノードの結合は重み(Weight)で関係づけられる。重みは結合の``強さ''と表現されることもある。一つの結合に対し、前の層のノードの値と重みの積が次の層のノードとなる。
+一つのノードに、前の層のノードが複数結合するときは、結合する前の層の各ノードと重みの積の総和が次の層のノードとなる。例えば、図\ref{fig:全結合層によるネットワーク構造}におけるノード$M_1$の値は
+\begin{equation}
+\label{eq:全結合層}
+M_1 = w_{11}I_1 + w_{12}I_2 + w_{13}I_3 + w_{14}I_4
+\end{equation}
+となる。ここで$I_i$は入力層のノード、$w_{ij}$はノード$I_i$とノード$M_j$の結合の重みである。\\
+　このような層間のノードの結合の構造をニューラルネットワーク(Neural Network)と呼ぶ。図\ref{fig:全結合層によるネットワーク構造}のように前の層のすべてのノードが自身のノードと結合している層を全結合層(Fully Connected Layer)という。
+
+機械学習における変換はこのような重み付き和と活性化関数(Activation Function)と呼ばれる非線形変換で構成される。普遍近似定理(Universal Approximation Theorem)より、重み付き和ととある条件を満たす非線形関数と十分な数のノードがあれば、任意の変換を近似的に生成することができることが知られている。
+重み付き和と活性化関数による非線形変換、および変換後のノードをまとめて層(Layer)と呼ぶ。出力層やのちに述べる中間層はこれに該当する。入力層はこれに該当しないが、出力層や中間層と同じように層として扱うことが多い。
+\gazou{ML}{0.5}{全結合層によるネットワーク構造}
+図\ref{fig:全結合層によるネットワーク構造}のように入力層と出力層のみでニューラルネットワークが構成される場合、出力層の$i$番目のノード$M_i$は式\ref{eq:全結合層}をより一般化して
+\begin{equation}
+\label{eq:全結合層一般}
+M_i = \sum_{j} w_{ij} I_j
+\end{equation}
+と書ける。ここで$n$次元ベクトル$\boldsymbol{M}$の第$i$成分を$M_i$、$m$次元ベクトル$\boldsymbol{I}$の第$j$成分を$I_j$とすると、式\ref{eq:全結合層一般}は
+\begin{equation}
+\label{eq:matrixdif}
+(W)_{ij} = w_{ij}
+\end{equation}
+と定義される$n\times m$の重み行列$W$を用いて,
+\begin{equation}
+\label{eq:matrixpicture}
+\boldsymbol{M} = W \boldsymbol{I}
+\end{equation}
+と書ける。式\ref{eq:matrixpicture}は重み付き和を行列で表現したものである。さらに、活性化関数となる非線形変換を$T_{NL}$とすると、最終的な出力層のノードのベクトル表示$\boldsymbol{O}$は
+\begin{equation}
+\label{eq:matrixpicture2}
+\boldsymbol{O} = T_{NL}(\boldsymbol{M}) = T_{NL}W \boldsymbol{I}
+\end{equation}
+と書ける。
+\sect{深層学習}
+　前節では機械学習における変換の構造について述べ、入力層と出力層のみの単層のニューラルネットワークの例を扱った。ここではさらに深層学習について述べる。
+深層学習は重み付き和と非線形変換で構成される層が複数存在するようなニューラルネットワークを用いた機械学習である。入力層と出力層の間に追加された層はすべて中間層(Hidden Layer)に分類される。
+\gazou{DL}{0.5}{深層学習におけるニューラルネットワークの構造}
+深層学習では層を複数重ねることで、入力から出力までの変換をより複雑にすることができ、複雑なデータの分類、予測が可能になる。
+理論上は、普遍近似定理より単層のみでも任意の変換を近似的に生成することができるが、必要なノードの数が膨大になってしまい、計算に時間がかかってしまう。一方で、層を重ねることで、より少ないノード数で複雑な変換を近似できる。\\
+　深層学習による中間層のノードをベクトル表示すると、図\ref{fig:深層学習におけるニューラルネットワークの構造}のようにひとつ前の中間層のノードからの伝搬は\ref{sect:機械学習の構造}節と同様に行列表示を用いて
+\begin{equation}
+\label{eq:深層学習中間層}
+\boldsymbol{v}^{(k)} = T_{NL}^{(k)}(\boldsymbol{u}^{(k)}) = T_{NL}^{(k)}W^{(k)}\boldsymbol{v}^{(k-1)}
+\end{equation}
+と書ける。ここで$\boldsymbol{v}^{(k)}$は$k$番目の中間層の非線形変換後のノードのベクトル表示、$\boldsymbol{u}^{(k)}$は$k$番目の中間層の重み付き和後のノードのベクトル表示、$W^{(k)}$は$k$番目の中間層の重み行列、$T_{NL}^{(k)}$は$k$番目の中間層の非線形変換である。
+さらに、入力層を0番目の層、ベクトル表示を$\boldsymbol{I} = \boldsymbol{v}^{(0)}$、出力層を$n$番目の層とすることで、出力層を含み、入力層を除いて$n$個の層で構成されたニューラルネットワークの出力層のノードのベクトル表示$\boldsymbol{O}$は
+\begin{equation}
+\label{eq:深層学習出力層}
+\boldsymbol{O} = \boldsymbol{v}^{(n)} = T_{NL}^{(n)}W^{(n)}T_{NL}^{(n-1)}W^{(n-1)} \cdots T_{NL}^{(k)}W^{(k)} \cdots T_{NL}^{(1)}W^{(1)} \boldsymbol{v}^{(0)}
+\end{equation}
+と書ける。
+\sect{損失関数と最適化}
+　損失関数(Loss Function)による重みの更新は。機械学習において最も核心的な部分である。一般に損失関数は出力データと正解データの誤差を表す関数であり、この損失関数を小さくすることで``学習''を進め、正解率を上げる。
+したがって``学習を''を進めることは損失関数を最小にするような最適化問題を解くことに他ならない。この最適化問題は一般に勾配降下法(Gradient Descent Method)を用いて解かれる。
+\subsection{勾配降下法}
+　損失関数は出力データ$\boldsymbol{O}$と正解データ$\boldsymbol{\hat{O}}$を用いて$L(\boldsymbol{O}, \boldsymbol{\hat{O}})$と表される。
+出力データ$\boldsymbol{O}$は重み$W^{(k)}$に依存するので、損失関数$L$も重み$W^{(k)}$に依存する。したがって、損失関数$L$の重み$W^{(k)}$方向の勾配$\frac{\partial L}{\partial W^{(k)}}$を計算でき、勾配の逆方向、つまり$L$が小さくなる方向に
+重みを平行移動させればよい。つまり、現在の重みを$W^{(k)}_{old}$、学習率(Learning Rate)を$\eta$とすると、新たに更新された重み$W^{(k)}_{new}$は
+\begin{equation}
+\label{eq:勾配降下法}
+W^{(k)}_{new} = W^{(k)}_{old} - \eta \left. \frac{\partial L}{\partial W^{(k)}}\right|_{W^{(k)}=W^{(k)}_{old}}
+\end{equation}
+と書ける。これを逐次的に繰り返すことで損失関数$L$を小さくし、``学習''を進める。学習率(Learning Rate)$\eta$は一回の更新でどれだけ重みを変化させるかを決定するパラメータである。
+学習率$\eta$が大きすぎると、損失関数が最小にとならずに発散してしまう。逆に、学習率$\eta$が小さすぎると極小に陥ってしまい、真にの最小値に到達できないことがある。
+\subsection{誤差逆伝播法}
+　重みを更新するために損失関数の重み方向の勾配を計算する必要がある。この勾配の計算には誤差逆伝播法(Back Propagation Method)が用いられる。誤差逆伝播法は入力→出力とは逆方向に勾配を計算し、重みを更新する方法である。
+まず、出力層のにつながる重み$W^{(n)}$方向の損失関数$L(\boldsymbol{O}, \boldsymbol{\hat{O}})$の勾配は$\boldsymbol{O} = T_{NL}W^{(n)}\boldsymbol{v}^{(n-1)}$より、
+\begin{equation}
+\label{eq:出力層勾配}
+\frac{\partial L}{\partial W^{(n)}} = \frac{\partial L}{\partial \boldsymbol{O}} \cdot \frac{\partial \boldsymbol{O}}{\partial W^{(n)}}
+\end{equation}
+と書ける。さらにひとつ前の重み$W^{(n-1)}$方向の損失関数$L(\boldsymbol{O}, \boldsymbol{\hat{O}})$の勾配は
+\begin{equation}
+\label{eq:中間層勾配}
+\frac{\partial L}{\partial W^{(n-1)}} = \frac{\partial L}{\partial W^{(n)}}\frac{\partial W^{(n)}}{\partial \boldsymbol{v}^{(n-1)}} \cdot \frac{\partial \boldsymbol{v}^{(n-1)}}{\partial W^{(n-1)}}
+\end{equation}
+つまり、微分の連鎖率を使えば、k番目の重み$W^{(k)}$方向の損失関数$L(\boldsymbol{O}, \boldsymbol{\hat{O}})$の勾配は
+\begin{equation}
+\label{eq:k番目の重み勾配}
+\frac{\partial L}{\partial W^{(k)}} = \frac{\partial L}{\partial W^{(k+1)}}\frac{\partial W^{(k+1)}}{\partial \boldsymbol{v}^{(k)}} \cdot \frac{\partial \boldsymbol{v}^{(k)}}{\partial W^{(k)}}
+\end{equation}
+任意のkでの勾配は、その次k+1での勾配を用いて計算できる。したがって、出力層から逆方向に順次勾配を計算していくことで、すべての重み$W^{(k)}$方向の損失関数$L(\boldsymbol{O}, \boldsymbol{\hat{O}})$の勾配を効率的に計算できる。
+\sect{機械学習モデル}
+　本研究で用いる機械学習モデルについて述べる。基本の構造は各層のノードが全結合層で結ばれたニューラルネットワークである。学習の目的や入力データの構造に応じて、特殊なネットワーク構造を用いる。
+\subsection{残差接続ネットワーク}
+　一般に、深層学習のように層を深くするほど、より複雑な変換の近似が可能になる。しかし、同時に学習が層が深くなるほど誤差逆伝播によって浅い層に伝わる勾配が小さくなり、浅い層の学習が進まなくなる勾配消失(Gradient Loss)の問題が発生する。
+この問題を解決するために、残差接続ネットワーク(Residual Network:ResNet)が導入された。
+残差接続ネットワークでは、出力そのものではなく、出力と入力の差分(残差:Residual)を学習する。具体的には、とある層の入力$x=v^{(l)}$に対し、いくつか層を通過した後の出力$y=v^{(m)}$を
+\begin{equation}
+\label{eq:残差接続}
+y = x + F(x)
+\end{equation}
+と表す。ここで$F$は中間層における通常の変換$T^{(m)}W^{(m)}\dots T^{(l+1)}W^{(l+1)}$である。
+\gazou{ResNet}{0.8}{残差接続ネットワークの構造}
+残差接続ネットワークでは残差$y-x=F(x)$の勾配を求めることで学習を進める。誤差逆伝播法によって損失関数$L$の勾配を計算すると、
+\begin{equation}
+\label{eq:残差接続勾配}
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} \left( 1 + \frac{\partial F}{\partial x} \right)
+\end{equation}
+となる。したがって、$\frac{\partial F}{\partial x}$が小さくなっても勾配が完全に消失することがないので、浅い層の学習が進まなくなる問題を軽減できる。
+また、残差接続ネットワークは既存の全結合層に容易に組み込むことができる。
+\subsection{畳み込みニューラルネットワーク}
+\gazou{CNN}{0.35}{畳み込みニューラルネットワークにおける畳み込み演算}
+　入力データが画像データのように、隣接するデータ同士に強い相関がある場合、畳み込みニューラルネットワーク(Convolutional Neural Network:CNN)が用いられる。
+畳み込みニューラルネットワークでは、全結合層の代わりに畳み込み層(Convolutional Layer)を用いる。畳み込み層では、フィルター(Filter)と呼ばれる重みテンソルを入力データに対して演算させる。
+例えば、2次元の画像データの場合は$n\times n$のフィルター(重み行列)を画像の各ピクセルに対して、その周りの$n\times n$のピクセル領域に適用し、フロベニウス内積を計算する。これを全ピクセルに対して行うことで、特徴マップ(Feature Map)と呼ばれる新たな画像データを生成する。\\
+　さらに、畳み込みの後にはプーリング層(Pooling Layer)を挟むことが多い。プーリング層では、特徴マップの中で最大値を取る最大プーリング(Max Pooling)や平均値を取る平均プーリング(Average Pooling)などの演算を行い、特徴マップのサイズを縮小する。
+プーリング層による変換は非線形変換であり、全結合層における活性化関数と同様に変換の多様化の役割がある。また、特徴マップのサイズを縮小することで計算量を削減し、過学習(Overfitting)を防止する効果もある。
+\chap{機械学習に使用するデータと観測サンプル}
+　本研究では式\ref{eq:拡散方程式}に基づいてDRAGONコードによって生成された宇宙線電子のモンテカルロシミュレーションの観測サンプルを学習データに用いる。
+\end{document}
